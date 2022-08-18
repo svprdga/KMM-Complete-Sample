@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 version = "1.0"
@@ -23,13 +24,22 @@ kotlin {
     }
     
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                api("dev.icerock.moko:resources:0.20.1")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                //implementation("dev.icerock.moko:resources-test:0.20.1")
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                //api("dev.icerock.moko:resources-compose:0.20.1")
+            }
+        }
         val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -59,4 +69,12 @@ android {
         minSdk = 24
         targetSdk = 32
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.svprdga.kmmcompletesample" // required
+    multiplatformResourcesClassName = "SharedRes" // optional, default MR
+    multiplatformResourcesVisibility = dev.icerock.gradle.MRVisibility.Internal // optional, default Public
+    iosBaseLocalizationRegion = "en" // optional, default "en"
+    multiplatformResourcesSourceSet = "commonMain"  // optional, default "commonMain"
 }
